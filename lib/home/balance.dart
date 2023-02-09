@@ -5,13 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Balance extends StatelessWidget {
-  Balance({super.key, required this.norek, required this.date});
+  Balance({super.key, required this.date});
 
-  final String norek;
   final String date;
-  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('users');
     return Padding(
@@ -41,36 +40,39 @@ class Balance extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Row(children: [
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      snapshot.data!['balance'].toString(),
-                      style: TextStyle(
-                        fontSize: 26,
-                      ),
-                    )
-                  ]);
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          snapshot.data!['balance'].toString(),
+                          style: TextStyle(
+                            fontSize: 26,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(snapshot.data!['no_rek'],
+                                style: TextStyle(
+                                    fontSize: 15, color: blueTextStyle.color)),
+                            Text(
+                              date,
+                              style: TextStyle(fontSize: 10),
+                            )
+                          ],
+                        )
+                      ]);
                 } else {
                   return Text("loading");
                 }
               },
             ),
-            SizedBox(
-              height: 25,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(norek,
-                    style: TextStyle(fontSize: 10, color: blueTextStyle.color)),
-                Text(
-                  date,
-                  style: TextStyle(fontSize: 10),
-                )
-              ],
-            )
           ],
         ),
       ),

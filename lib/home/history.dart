@@ -10,6 +10,7 @@ class History extends StatelessWidget {
 
   History({super.key, required this.imageUrl});
   User? history = FirebaseAuth.instance.currentUser;
+  User? history2 = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
@@ -22,9 +23,6 @@ class History extends StatelessWidget {
         child: StreamBuilder<QuerySnapshot>(
           stream: history.snapshots(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Text('tidak ada data');
-            }
             if (snapshot.hasData) {
               return Container(
                 height: MediaQuery.of(context).size.height,
@@ -62,7 +60,15 @@ class History extends StatelessWidget {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Text("nama  : " + data['nama']),
+                                      Row(
+                                        children: [
+                                          data['method'] == 'topup'
+                                              ? Text('pengirim :')
+                                              : Text("nama  : "),
+                                          Text(data['nama'])
+                                        ],
+                                      ),
+                                      Text(history2!.uid),
                                       SizedBox(
                                         height: 10,
                                       ),
@@ -80,9 +86,13 @@ class History extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text("status :"),
-                                          Text(" berhasil",
-                                              style: TextStyle(
-                                                  color: Colors.green))
+                                          data['method'] == 'topup'
+                                              ? Text(" penerima",
+                                                  style: TextStyle(
+                                                      color: Colors.green))
+                                              : Text(" pengirim",
+                                                  style: TextStyle(
+                                                      color: Colors.green))
                                         ],
                                       )
                                     ],
@@ -147,10 +157,14 @@ class History extends StatelessWidget {
                               ),
                               Column(
                                 children: [
-                                  Text("-" + data['cashe_out'],
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: softpurpleColor)),
+                                  data['method'] == "topup"
+                                      ? Text("+" + data['cashe_out'],
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.green))
+                                      : Text("-" + data['cashe_out'],
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.red)),
                                   Text(data['keterangan'],
                                       style: TextStyle(
                                           fontSize: 10,

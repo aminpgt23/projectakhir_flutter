@@ -181,6 +181,9 @@ class _LoginPageState extends State<LoginPage> {
                     context: context,
                     dialogType: DialogType.noHeader,
                     headerAnimationLoop: true,
+                    body: Center(
+                      child: CircularProgressIndicator(color: softblueColor),
+                    ),
                     animType: AnimType.rightSlide,
                     title: "Loading....",
                     titleTextStyle: TextStyle(color: softblueTextStyle.color)
